@@ -45,7 +45,8 @@
 - Пишем код программы для вывода надписи и запускаем её 
 ![image](https://user-images.githubusercontent.com/77449049/192768891-f228fda3-242d-4f7f-b242-ffd2129eaeff.png)
 - Сохраняем нашу программу на облачном диске
- ![image](https://user-images.githubusercontent.com/77449049/192769159-13f02403-af1c-4dcf-8da3-a0c426193eeb.png)
+
+![image](https://user-images.githubusercontent.com/77449049/192769159-13f02403-af1c-4dcf-8da3-a0c426193eeb.png)
 
 ### Unity
 - Создаём проект в unity и добавляем в него компонент new script ![image](https://user-images.githubusercontent.com/77449049/192769639-c2229907-f66d-42fb-8497-f2febfe104ed.png)
@@ -62,17 +63,16 @@
 - Производим подготовку данных для работы с алгоритмом линейной регрессии
 - 10 видов данных были установлены случайным образом, и данные находились в линейной зависимости. Данные преобразуются в формат массива, чтобы их можно было вычислить напрямую при использовании умножения и сложения.
 ```py
-#Import the required modules, numpy for calculation, and Matplotlib for drawing
 import numpy as np
 import matplotlib.pyplot as plt
-#This code is for jupyter Notebook only
+
 %matplotlib inline
-# define data, and change list to array
+
 x = [3,21,22,34,54,34,55,67,89,99]
 x = np.array(x)
 y = [2,22,24,65,79,82,55,130,150,199]
 y = np.array(y)
-#Show the effect of a scatter plot
+
 plt.scatter(x,y)
 ```
 ![image](https://user-images.githubusercontent.com/77449049/192773021-db624ed0-2f19-437e-a813-83e62b2648dd.png)
@@ -100,9 +100,9 @@ def iterate(a, b, x, y, times):
     return a, b
     
 ```
-- Начинаем итерацию
+- Начинаем итерацию, меняем значение переменной times
 
-*1. Инициализация и модель итеративной оптимизации
+1. Инициализация и модель итеративной оптимизации
 
 ```py
 a = np.random.rand(1)
@@ -120,6 +120,35 @@ plt.plot(x, prediction)
 
 ![image](https://user-images.githubusercontent.com/77449049/192774056-7fc154fa-9ac2-4105-995c-ab0064122cc1.png)
 
+2. На второй итерации отображаются значения параметров, значения потерь и эффекты визуализации после итерации
+
+
+```py
+a,b = iterate(a,b,x,y,2)
+prediction=model(a,b,x)
+loss = loss_function(a, b, x, y)
+print(a,b,loss)
+plt.scatter(x,y)
+plt.plot(x,prediction)
+```
+
+![image](https://user-images.githubusercontent.com/77449049/192776051-ccb6881e-0d75-434b-ae65-e8a128fd2be6.png)
+
+3. Третья итерация показывает значения параметров, значения потерь и визуализацию после итерации
+
+![image](https://user-images.githubusercontent.com/77449049/192776280-8ae2a7c4-72e8-4fb2-8d41-8c8d50974f4e.png)
+
+4. На четвертой итерации отображаются значения параметров, значения потерь и эффекты визуализации
+
+![image](https://user-images.githubusercontent.com/77449049/192776371-02236dc5-8545-4735-841d-62c8bea81ddf.png)
+
+5. Пятая итерация показывает значение параметра, значение потерь и эффект визуализации после итерации
+
+![image](https://user-images.githubusercontent.com/77449049/192776545-cfb25532-0efb-4798-8ebe-391e0855f466.png)
+
+6. 10000-я итерация, показывающая значения параметров, потери и визуализацию после итерации
+
+![image](https://user-images.githubusercontent.com/77449049/192776626-a0983687-ca6e-4b65-b0cf-a9ba08a2fc16.png)
 
 ## Задание 3
 ### Должна ли величина loss стремиться к нулю при изменении исходных данных? Какова роль параметра Lr?
