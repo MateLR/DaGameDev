@@ -118,18 +118,13 @@ plt.scatter(x, y)
 plt.plot(x, prediction)
 ```
 
-![image](https://user-images.githubusercontent.com/77449049/192774056-7fc154fa-9ac2-4105-995c-ab0064122cc1.png)
+![image](https://user-images.githubusercontent.com/77449049/192777275-09de1d38-5091-4ad9-9778-4fd1c5a8506f.png)
 
 2. На второй итерации отображаются значения параметров, значения потерь и эффекты визуализации после итерации
 
-
 ```py
 a,b = iterate(a,b,x,y,2)
-prediction=model(a,b,x)
-loss = loss_function(a, b, x, y)
-print(a,b,loss)
-plt.scatter(x,y)
-plt.plot(x,prediction)
+#Меняем последнее значение, которое посылаем в функцию iterate
 ```
 
 ![image](https://user-images.githubusercontent.com/77449049/192776051-ccb6881e-0d75-434b-ae65-e8a128fd2be6.png)
@@ -144,7 +139,7 @@ plt.plot(x,prediction)
 
 5. Пятая итерация показывает значение параметра, значение потерь и эффект визуализации после итерации
 
-![image](https://user-images.githubusercontent.com/77449049/192776545-cfb25532-0efb-4798-8ebe-391e0855f466.png)
+![image](https://user-images.githubusercontent.com/77449049/192777187-4a26bafe-64fd-4946-97b9-354d0d28aa21.png)
 
 6. 10000-я итерация, показывающая значения параметров, потери и визуализацию после итерации
 
