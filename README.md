@@ -42,15 +42,17 @@
 Ход работы:
 ### Python
 - Создаём новый файл в google.colab ![image](https://user-images.githubusercontent.com/77449049/192769051-501ae1fe-0944-4a0a-9f4e-603e38fd52d0.png)
-- Пишем код программы для вывода надписи и запускаем её ![image](https://user-images.githubusercontent.com/77449049/192768891-f228fda3-242d-4f7f-b242-ffd2129eaeff.png)
-- Сохраняем нашу программу на облачном диске ![image](https://user-images.githubusercontent.com/77449049/192769159-13f02403-af1c-4dcf-8da3-a0c426193eeb.png)
+- Пишем код программы для вывода надписи и запускаем её 
+![image](https://user-images.githubusercontent.com/77449049/192768891-f228fda3-242d-4f7f-b242-ffd2129eaeff.png)
+- Сохраняем нашу программу на облачном диске
+ ![image](https://user-images.githubusercontent.com/77449049/192769159-13f02403-af1c-4dcf-8da3-a0c426193eeb.png)
 
 ### Unity
-- Создаём проект в unity и добавляем в него компонент ![image](https://user-images.githubusercontent.com/77449049/192769639-c2229907-f66d-42fb-8497-f2febfe104ed.png)
-
+- Создаём проект в unity и добавляем в него компонент new script ![image](https://user-images.githubusercontent.com/77449049/192769639-c2229907-f66d-42fb-8497-f2febfe104ed.png)
+![image](https://user-images.githubusercontent.com/77449049/192770032-d670ead8-85cd-42a5-99f1-55f38eb61579.png)
 - В созданном компоненте с помощью visual studio code пишем программу по выводу консоль надписи и сохраняем её
+![image](https://user-images.githubusercontent.com/77449049/192770140-f949b7ee-1e79-48e4-ac09-e3ae8707f173.png)
 - После запуска сцены мы должны увидеть надпись в консоле
-
 
 
 ## Задание 2
