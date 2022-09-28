@@ -53,13 +53,72 @@
 - В созданном компоненте с помощью visual studio code пишем программу по выводу консоль надписи и сохраняем её
 ![image](https://user-images.githubusercontent.com/77449049/192770140-f949b7ee-1e79-48e4-ac09-e3ae8707f173.png)
 - После запуска сцены мы должны увидеть надпись в консоле
+![image](https://user-images.githubusercontent.com/77449049/192771890-3829a62f-6ae6-4bc9-b8df-5311030aee9d.png)
 
 
 ## Задание 2
 ### Пошагово выполнить каждый пункт раздела "ход работы" с описанием и примерами реализации задач
 Ход работы:
-- Произвести подготовку данных для линейной регрессии. Добавить библеотеки numpy и matplotlib для вычислений и отрисовки соответсвтенно. Добавить списки из случайных данных.
+- Производим подготовку данных для работы с алгоритмом линейной регрессии
+- 10 видов данных были установлены случайным образом, и данные находились в линейной зависимости. Данные преобразуются в формат массива, чтобы их можно было вычислить напрямую при использовании умножения и сложения.
+```py
+#Import the required modules, numpy for calculation, and Matplotlib for drawing
+import numpy as np
+import matplotlib.pyplot as plt
+#This code is for jupyter Notebook only
+%matplotlib inline
+# define data, and change list to array
+x = [3,21,22,34,54,34,55,67,89,99]
+x = np.array(x)
+y = [2,22,24,65,79,82,55,130,150,199]
+y = np.array(y)
+#Show the effect of a scatter plot
+plt.scatter(x,y)
+```
+![image](https://user-images.githubusercontent.com/77449049/192773021-db624ed0-2f19-437e-a813-83e62b2648dd.png)
 
+- Определяем связанные функции. Функция модели: определяет модель линейной регрессии wx+b. Функция потерь: функция потерь среднеквадратичной ошибки. Функция оптимизации: метод градиентного спуска для нахождения частных производных w и b.
+
+```py
+def model(a, b, x):
+    return a * x + b
+def loss_function(a, b, x, y):
+    num = len(x)
+    prediction = model(a, b, x)
+    return (0.5 / num) * (np.square(prediction - y)).sum()
+def optimize(a, b, x, y):
+    num = len(x)
+    prediction = model(a, b, x)
+    da = (1.0 / num) * ((prediction - y) * x).sum()
+    db = (1.0 / num) * ((prediction - y).sum())
+    a = a - Lr * da
+    b = b - Lr * db
+    return a, b
+def iterate(a, b, x, y, times):
+    for i in range(times):
+        a, b = optimize(a, b, x, y)
+    return a, b
+    
+```
+- Начинаем итерацию
+
+*1. Инициализация и модель итеративной оптимизации
+
+```py
+a = np.random.rand(1)
+print(a)
+b = np.random.rand(1)
+print(b)
+Lr = 0.000001
+a, b = iterate(a, b, x, y, 1)
+prediction = model(a, b, x)
+loss = loss_function(a, b, x, y)
+print(a, b, loss)
+plt.scatter(x, y)
+plt.plot(x, prediction)
+```
+
+![image](https://user-images.githubusercontent.com/77449049/192774056-7fc154fa-9ac2-4105-995c-ab0064122cc1.png)
 
 
 ## Задание 3
