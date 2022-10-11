@@ -40,7 +40,7 @@
 ## Задание 1
 ### Реализовать совместную работу и передачу данных в связке Python - Google-Sheets – Unity.
 Ход работы:
-### Python
+### Python - Google-Sheets
 - Создаём новый проект в google console
 
 ![image](https://user-images.githubusercontent.com/77449049/195097032-a354c9fa-3dbc-43b9-b789-1a67441826c9.png)
@@ -81,15 +81,122 @@ while i <= len(mon):
         print(tempInf)
 
 ```
-![image](https://user-images.githubusercontent.com/77449049/192769159-13f02403-af1c-4dcf-8da3-a0c426193eeb.png)
+- Теперь в нашу таблицу загружаются необходимые данные
 
-### Unity
-- Создаём проект в unity и добавляем в него компонент new script ![image](https://user-images.githubusercontent.com/77449049/192769639-c2229907-f66d-42fb-8497-f2febfe104ed.png)
-![image](https://user-images.githubusercontent.com/77449049/192770032-d670ead8-85cd-42a5-99f1-55f38eb61579.png)
-- В созданном компоненте с помощью visual studio code пишем программу по выводу консоль надписи и сохраняем её
-![image](https://user-images.githubusercontent.com/77449049/192770140-f949b7ee-1e79-48e4-ac09-e3ae8707f173.png)
-- После запуска сцены мы должны увидеть надпись в консоле
-![image](https://user-images.githubusercontent.com/77449049/192771890-3829a62f-6ae6-4bc9-b8df-5311030aee9d.png)
+![image](https://user-images.githubusercontent.com/77449049/195106336-038ec2aa-64b6-4c2e-9ee9-e55922a21b3b.png)
+
+### Google-Sheets – Unity
+
+- Создаём ключ api в google console и открываем доступ к таблице по ссылке
+
+![image](https://user-images.githubusercontent.com/77449049/195107382-7c5dcdff-8a7b-4fef-b840-899c66f03053.png)
+
+- Импортируем в Unity наш проект звуки и скрипты
+
+![image](https://user-images.githubusercontent.com/77449049/195109254-ac9c85d3-d740-45a7-a728-66b435c6f420.png)
+
+- Пишем скрипт для воспроизведение звуков в зависимости от значений в таблице
+
+
+```py
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Networking;
+using SimpleJSON;
+
+public class NewBehaviourScript : MonoBehaviour
+{
+    public AudioClip goodSpeak;
+    public AudioClip normalSpeak;
+    public AudioClip badSpeak;
+    private AudioSource selectAudio;
+    private Dictionary<string,float> dataSet = new Dictionary<string, float>();
+    private bool statusStart = false;
+    private int i = 1;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        StartCoroutine(GoogleSheets());
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (dataSet["Mon_" + i.ToString()] <= 10 & statusStart == false & i != dataSet.Count)
+        {
+            StartCoroutine(PlaySelectAudioGood());
+            Debug.Log(dataSet["Mon_" + i.ToString()]);
+        }
+
+        if (dataSet["Mon_" + i.ToString()] > 10 & dataSet["Mon_" + i.ToString()] < 100 & statusStart == false & i != dataSet.Count)
+        {
+            StartCoroutine(PlaySelectAudioNormal());
+            Debug.Log(dataSet["Mon_" + i.ToString()]);
+        }
+
+        if (dataSet["Mon_" + i.ToString()] >= 100 & statusStart == false & i != dataSet.Count)
+        {
+            StartCoroutine(PlaySelectAudioBad());
+            Debug.Log(dataSet["Mon_" + i.ToString()]);
+        }
+    }
+
+    IEnumerator GoogleSheets()
+    {
+        UnityWebRequest curentResp = UnityWebRequest.Get("https://sheets.googleapis.com/v4/1OV78kABwxT5I6IH4F******8t3CFgoUOOdNl6Jo1J2o/values/Лист1?key=AIzaS*****pFc24klkYDh2jsbTOuXufgW4crNc");
+        yield return curentResp.SendWebRequest();
+        string rawResp = curentResp.downloadHandler.text;
+        var rawJson = JSON.Parse(rawResp);
+        foreach (var itemRawJson in rawJson["values"])
+        {
+            var parseJson = JSON.Parse(itemRawJson.ToString());
+            var selectRow = parseJson[0].AsStringList;
+            dataSet.Add(("Mon_" + selectRow[0]), float.Parse(selectRow[2]));
+        }
+    }
+
+    IEnumerator PlaySelectAudioGood()
+    {
+        statusStart = true;
+        selectAudio = GetComponent<AudioSource>();
+        selectAudio.clip = goodSpeak;
+        selectAudio.Play();
+        yield return new WaitForSeconds(3);
+        statusStart = false;
+        i++;
+    }
+    IEnumerator PlaySelectAudioNormal()
+    {
+        statusStart = true;
+        selectAudio = GetComponent<AudioSource>();
+        selectAudio.clip = normalSpeak;
+        selectAudio.Play();
+        yield return new WaitForSeconds(3);
+        statusStart = false;
+        i++;
+    }
+    IEnumerator PlaySelectAudioBad()
+    {
+        statusStart = true;
+        selectAudio = GetComponent<AudioSource>();
+        selectAudio.clip = badSpeak;
+        selectAudio.Play();
+        yield return new WaitForSeconds(4);
+        statusStart = false;
+        i++;
+    }
+}
+
+```
+![image](https://user-images.githubusercontent.com/77449049/195125091-5bba6594-6373-41fe-8914-cb0800b3987c.png)
+
+![image](https://user-images.githubusercontent.com/77449049/192773021-db624ed0-2f19-437e-a813-83e62b2648dd.png)
+
+![image](https://user-images.githubusercontent.com/77449049/195125194-62a901ab-5ccb-4baf-bc7b-58a38d41dc42.png)
+
+![image](https://user-images.githubusercontent.com/77449049/195125274-d7b3c5c1-f232-4513-a914-fd06cd9756c4.png)
 
 
 ## Задание 2
@@ -107,7 +214,7 @@ y = [2,22,24,65,79,82,55,130,150,199]
 y = np.array(y)
 plt.scatter(x,y)
 ```
-![image](https://user-images.githubusercontent.com/77449049/192773021-db624ed0-2f19-437e-a813-83e62b2648dd.png)
+
 
 - Определяем связанные функции. Функция модели: определяет модель линейной регрессии wx+b. Функция потерь: функция потерь среднеквадратичной ошибки. Функция оптимизации: метод градиентного спуска для нахождения частных производных w и b.
 
