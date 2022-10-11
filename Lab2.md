@@ -42,15 +42,23 @@
 Ход работы:
 ### Python
 - Создаём новый проект в google console
+
 ![image](https://user-images.githubusercontent.com/77449049/195097032-a354c9fa-3dbc-43b9-b789-1a67441826c9.png)
+
 - Подключаем необходимые api 
+
 ![image](https://user-images.githubusercontent.com/77449049/195100524-0ee7666b-a584-45ec-8c37-105a13a80017.png)
-![image](https://user-images.githubusercontent.com/77449049/195100749-a935161d-0942-4b15-8572-e0e56cc56df5.png)
+
 - Предоставляем доступ к созданной таблице почты с сервисного аккаунта из google console 
+
 ![image](https://user-images.githubusercontent.com/77449049/195102611-237318b0-8070-4c30-9f3f-8b53cd5fa61d.png)
+
 - Устанавливаем пакет gspread,numpy в наш проект
+
 ![image](https://user-images.githubusercontent.com/77449049/195103554-e5ef216e-00e8-42e4-85ed-e3a67942ea3e.png)
+
 - Реализовываем запись данных из питона в нашу таблицу
+
 ```py
 import gspread
 import numpy as np
