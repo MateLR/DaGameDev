@@ -201,10 +201,106 @@ public class NewBehaviourScript : MonoBehaviour
 ### Реализовать запись в Google-таблицу набора данных, полученных с помощью линейной регрессии из лабораторной работы № 1. 
 Ход работы:
 
+- Адаптируем код с прошлой лабораторной для передачи данных в таблицу
+
+```py
+import gspread
+import numpy as np
+
+
+x = [2,23,23,33,54,34,52,67,89,99]
+x = np.array(x)
+y = [1,12,24,61,19,81,55,130,110,293]
+y = np.array(y)
+
+gc = gspread.service_account(filename='unitydatascience-365212-e1ab4836a0eb.json')
+sh = gc.open("UnitySheet")
+
+def model(w, b, x):
+    return w*x + b
+
+def lossFun(w, b, x, y):
+    num = len(x)
+    predic = model(w, b, x)
+    return (0.5/num) * (np.square(predic-y)).sum()
+
+def optimization(lr, w, b, x, y):
+    num = len(x)
+    predic = model(w, b, x)
+    dw = (1.0/num) * ((predic - y) * x).sum()
+    db = (1.0/num) * ((predic - y).sum())
+    w = w - lr*dw
+    b = b - lr*db
+    return w, b
+
+def iter(lr, w, b, x, y, times):
+    for i in range(times):
+        w, b = optimization(lr, w, b, x, y)
+    return w,b
+
+lr = 0.000001
+a_f = np.random.rand(1)
+print(a_f)
+b_f = np.random.rand(1)
+print(b_f)
+
+a = np.copy(a_f)
+b = np.copy(b_f)
+n_a = np.arange(1, 6) * 200
+n_a = np.concatenate([[1], n_a])
+a_loss = []
+
+for i, n in enumerate(n_a):
+    a, b = iter(lr, a, b, x, y, n)
+    pred = model(a, b, x)
+    loss = lossFun(a, b, x, y)
+    a_loss.append(loss)
+
+    print(a, b, loss)
+    sh.sheet1.update(('A' + str(i + 1)), str(n))
+    sh.sheet1.update(('B' + str(i + 1)), f"{a[0]:.3f}".replace('.',','))
+    sh.sheet1.update(('C' + str(i + 1)), f"{b[0]:.3f}".replace('.',','))
+    sh.sheet1.update(('D' + str(i + 1)), f"{loss:.3f}".replace('.',','))
+```
+![image](https://user-images.githubusercontent.com/77449049/195128628-51ec4434-632b-4183-9d1d-ace35ff0d5e6.png)
+
+![image](https://user-images.githubusercontent.com/77449049/195128758-ec718d8c-cc8c-48da-bc3f-211f4f9e1e5f.png)
+
 
 ## Задание 3
 ### Самостоятельно разработать сценарий воспроизведения звукового сопровождения в Unity в зависимости от изменения считанных данных в задании 2.
 
+- Будем считывать данные с 4 колонки таблицы, то есть будем работать со значением loss
+
+```
+            dataSet.Add(("Mon_" + selectRow[0]), float.Parse(selectRow[4]));
+
+```
+
+- Также изменим сценарий воспроизведения звука, например, x > 300 - Normal; x > 800 - Great; x <= 300 - Bad;
+
+```
+    void Update()
+    {
+        if (dataSet["Mon_" + i.ToString()] > 800 & statusStart == false & i != dataSet.Count)
+        {
+            StartCoroutine(PlaySelectAudioGood());
+            Debug.Log(dataSet["Mon_" + i.ToString()]);
+        }
+
+        if (dataSet["Mon_" + i.ToString()] > 300 & dataSet["Mon_" + i.ToString()] < 800 & statusStart == false & i != dataSet.Count)
+        {
+            StartCoroutine(PlaySelectAudioNormal());
+            Debug.Log(dataSet["Mon_" + i.ToString()]);
+        }
+
+        if (dataSet["Mon_" + i.ToString()] <= 300 & statusStart == false & i != dataSet.Count)
+        {
+            StartCoroutine(PlaySelectAudioBad());
+            Debug.Log(dataSet["Mon_" + i.ToString()]);
+        }
+    }
+```
 
 ## Выводы
 
