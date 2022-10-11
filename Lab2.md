@@ -41,11 +41,38 @@
 ### Реализовать совместную работу и передачу данных в связке Python - Google-Sheets – Unity.
 Ход работы:
 ### Python
-- Создаём новый файл в google.colab ![image](https://user-images.githubusercontent.com/77449049/192769051-501ae1fe-0944-4a0a-9f4e-603e38fd52d0.png)
-- Пишем код программы для вывода надписи и запускаем её 
-![image](https://user-images.githubusercontent.com/77449049/192768891-f228fda3-242d-4f7f-b242-ffd2129eaeff.png)
-- Сохраняем нашу программу на облачном диске
+- Создаём новый проект в google console
+![image](https://user-images.githubusercontent.com/77449049/195097032-a354c9fa-3dbc-43b9-b789-1a67441826c9.png)
+- Подключаем необходимые api 
+![image](https://user-images.githubusercontent.com/77449049/195100524-0ee7666b-a584-45ec-8c37-105a13a80017.png)
+![image](https://user-images.githubusercontent.com/77449049/195100749-a935161d-0942-4b15-8572-e0e56cc56df5.png)
+- Предоставляем доступ к созданной таблице почты с сервисного аккаунта из google console 
+![image](https://user-images.githubusercontent.com/77449049/195102611-237318b0-8070-4c30-9f3f-8b53cd5fa61d.png)
+- Устанавливаем пакет gspread,numpy в наш проект
+![image](https://user-images.githubusercontent.com/77449049/195103554-e5ef216e-00e8-42e4-85ed-e3a67942ea3e.png)
+- Реализовываем запись данных из питона в нашу таблицу
+```py
+import gspread
+import numpy as np
+gc = gspread.service_account(filename='unitydatascience-365212-e1ab4836a0eb.json')
+sh = gc.open("UnitySheet")
+price = np.random.randint(2000, 10000, 11)
+mon = list(range(1,11))
+i = 0
+while i <= len(mon):
+    i += 1
+    if i == 0:
+        continue
+    else:
+        tempInf = ((price[i-1]-price[i-2])/price[i-2])*100
+        tempInf = str(tempInf)
+        tempInf = tempInf.replace('.',',')
+        sh.sheet1.update(('A' + str(i)), str(i))
+        sh.sheet1.update(('B' + str(i)), str(price[i-1]))
+        sh.sheet1.update(('C' + str(i)), str(tempInf))
+        print(tempInf)
 
+```
 ![image](https://user-images.githubusercontent.com/77449049/192769159-13f02403-af1c-4dcf-8da3-a0c426193eeb.png)
 
 ### Unity
