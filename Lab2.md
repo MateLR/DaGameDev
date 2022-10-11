@@ -38,7 +38,7 @@
 Ознакомиться с основными операторами языка Python на примере реализации линейной регрессии.
 
 ## Задание 1
-### Написать программы Hello World на Python и Unity.
+### Реализовать совместную работу и передачу данных в связке Python - Google-Sheets – Unity.
 Ход работы:
 ### Python
 - Создаём новый файл в google.colab ![image](https://user-images.githubusercontent.com/77449049/192769051-501ae1fe-0944-4a0a-9f4e-603e38fd52d0.png)
