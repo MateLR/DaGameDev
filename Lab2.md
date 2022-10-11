@@ -272,29 +272,29 @@ for i, n in enumerate(n_a):
 
 - Будем считывать данные с 4 колонки таблицы, то есть будем работать со значением loss
 
-```
-            dataSet.Add(("Mon_" + selectRow[0]), float.Parse(selectRow[4]));
+```py
+            dataSet.Add(("Mon_" + selectRow[0]), float.Parse(selectRow[3]));
 
 ```
 
-- Также изменим сценарий воспроизведения звука, например, x > 300 - Normal; x > 800 - Great; x <= 300 - Bad;
+- Также изменим сценарий воспроизведения звука, например, x > 3000 - Normal; x > 4000 - Great; x <= 3000 - Bad;
 
-```
+```py
     void Update()
     {
-        if (dataSet["Mon_" + i.ToString()] > 800 & statusStart == false & i != dataSet.Count)
+        if (dataSet["Mon_" + i.ToString()] > 4000 & statusStart == false & i != dataSet.Count)
         {
             StartCoroutine(PlaySelectAudioGood());
             Debug.Log(dataSet["Mon_" + i.ToString()]);
         }
 
-        if (dataSet["Mon_" + i.ToString()] > 300 & dataSet["Mon_" + i.ToString()] < 800 & statusStart == false & i != dataSet.Count)
+        if (dataSet["Mon_" + i.ToString()] > 3000 & dataSet["Mon_" + i.ToString()] < 4000 & statusStart == false & i != dataSet.Count)
         {
             StartCoroutine(PlaySelectAudioNormal());
             Debug.Log(dataSet["Mon_" + i.ToString()]);
         }
 
-        if (dataSet["Mon_" + i.ToString()] <= 300 & statusStart == false & i != dataSet.Count)
+        if (dataSet["Mon_" + i.ToString()] <= 3000 & statusStart == false & i != dataSet.Count)
         {
             StartCoroutine(PlaySelectAudioBad());
             Debug.Log(dataSet["Mon_" + i.ToString()]);
