@@ -192,134 +192,25 @@ public class NewBehaviourScript : MonoBehaviour
 ```
 ![image](https://user-images.githubusercontent.com/77449049/195125091-5bba6594-6373-41fe-8914-cb0800b3987c.png)
 
-![image](https://user-images.githubusercontent.com/77449049/192773021-db624ed0-2f19-437e-a813-83e62b2648dd.png)
-
 ![image](https://user-images.githubusercontent.com/77449049/195125194-62a901ab-5ccb-4baf-bc7b-58a38d41dc42.png)
 
 ![image](https://user-images.githubusercontent.com/77449049/195125274-d7b3c5c1-f232-4513-a914-fd06cd9756c4.png)
 
 
 ## Задание 2
-### Пошагово выполнить каждый пункт раздела "ход работы" с описанием и примерами реализации задач
+### Реализовать запись в Google-таблицу набора данных, полученных с помощью линейной регрессии из лабораторной работы № 1. 
 Ход работы:
-- Производим подготовку данных для работы с алгоритмом линейной регрессии
-- 10 видов данных были установлены случайным образом, и данные находились в линейной зависимости. Данные преобразуются в формат массива, чтобы их можно было вычислить напрямую при использовании умножения и сложения.
-```py
-import numpy as np
-import matplotlib.pyplot as plt
-%matplotlib inline
-x = [3,21,22,34,54,34,55,67,89,99]
-x = np.array(x)
-y = [2,22,24,65,79,82,55,130,150,199]
-y = np.array(y)
-plt.scatter(x,y)
-```
 
-
-- Определяем связанные функции. Функция модели: определяет модель линейной регрессии wx+b. Функция потерь: функция потерь среднеквадратичной ошибки. Функция оптимизации: метод градиентного спуска для нахождения частных производных w и b.
-
-```py
-def model(a, b, x):
-    return a * x + b
-def loss_function(a, b, x, y):
-    num = len(x)
-    prediction = model(a, b, x)
-    return (0.5 / num) * (np.square(prediction - y)).sum()
-def optimize(a, b, x, y):
-    num = len(x)
-    prediction = model(a, b, x)
-    da = (1.0 / num) * ((prediction - y) * x).sum()
-    db = (1.0 / num) * ((prediction - y).sum())
-    a = a - Lr * da
-    b = b - Lr * db
-    return a, b
-def iterate(a, b, x, y, times):
-    for i in range(times):
-        a, b = optimize(a, b, x, y)
-    return a, b
-    
-```
-- Начинаем итерацию, меняем значение переменной times
-
-1. Инициализация и модель итеративной оптимизации
-
-```py
-a = np.random.rand(1)
-print(a)
-b = np.random.rand(1)
-print(b)
-Lr = 0.000001
-a, b = iterate(a, b, x, y, 1)
-prediction = model(a, b, x)
-loss = loss_function(a, b, x, y)
-print(a, b, loss)
-plt.scatter(x, y)
-plt.plot(x, prediction)
-```
-
-![image](https://user-images.githubusercontent.com/77449049/192777275-09de1d38-5091-4ad9-9778-4fd1c5a8506f.png)
-
-2. На второй итерации отображаются значения параметров, значения потерь и эффекты визуализации после итерации
-
-```py
-a,b = iterate(a,b,x,y,2)
-#Меняем последнее значение, которое посылаем в функцию iterate
-```
-
-![image](https://user-images.githubusercontent.com/77449049/192776051-ccb6881e-0d75-434b-ae65-e8a128fd2be6.png)
-
-3. Третья итерация показывает значения параметров, значения потерь и визуализацию после итерации
-
-![image](https://user-images.githubusercontent.com/77449049/192776280-8ae2a7c4-72e8-4fb2-8d41-8c8d50974f4e.png)
-
-4. На четвертой итерации отображаются значения параметров, значения потерь и эффекты визуализации
-
-![image](https://user-images.githubusercontent.com/77449049/192776371-02236dc5-8545-4735-841d-62c8bea81ddf.png)
-
-5. Пятая итерация показывает значение параметра, значение потерь и эффект визуализации после итерации
-
-![image](https://user-images.githubusercontent.com/77449049/192777187-4a26bafe-64fd-4946-97b9-354d0d28aa21.png)
-
-6. 10000-я итерация, показывающая значения параметров, потери и визуализацию после итерации
-
-![image](https://user-images.githubusercontent.com/77449049/192776626-a0983687-ca6e-4b65-b0cf-a9ba08a2fc16.png)
 
 ## Задание 3
-### Должна ли величина loss стремиться к нулю при изменении исходных данных? Какова роль параметра Lr?
-
-- Должна ли величина loss стремиться к нулю при изменении исходных данных?
-Как мы можем увидеть из предыдущих выводов в консоли, то при увеличении количества итерации величина loss уменьшается
-При изменении переменных x,y
-
-
-![image](https://user-images.githubusercontent.com/77449049/192779342-97a26015-62f1-4203-92ab-b05cb26e7f27.png)
-
-
-Можем увидить, что значение loss также уменьшается
-
-
-![image](https://user-images.githubusercontent.com/77449049/192779660-9fa99c00-930c-4678-912b-68171925882d.png)
-
-
-Но возможно при большом количестве итераций, оно примет какоё-то стабильное значение
-
-- Какова роль параметра Lr?
-Предполагаю, что роль параметра Lr в том, чтобы регулировать общую величину значений x, y
-Так как при его изменении меняется максимальные значения по осям
+### Самостоятельно разработать сценарий воспроизведения звукового сопровождения в Unity в зависимости от изменения считанных данных в задании 2.
 
 
 ## Выводы
 
-Выполнив данную лабораторную работу, я улучшил навыки анализа программ, базово освоил устройство работы unity, google.colab и текстового редактора github
+С помощью данной работы я научился взаимодействовать с api и передачей данных в таблицу, а также считыванием информации с таблицы
 
 | Plugin | README |
-| ------ | ------ |
-| Dropbox | [plugins/dropbox/README.md][PlDb] |
-| GitHub | [plugins/github/README.md][PlGh] |
-| Google Drive | [plugins/googledrive/README.md][PlGd] |
-| OneDrive | [plugins/onedrive/README.md][PlOd] |
-| Medium | [plugins/medium/README.md][PlMe] |
-| Google Analytics | [plugins/googleanalytics/README.md][PlGa] |
 
 ## Powered by
 
