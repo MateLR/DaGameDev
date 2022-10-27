@@ -40,153 +40,72 @@ dfdf
 ## Задание 1
 ### познакомиться с программными средствами для создания системы машинного обучения и ее интеграции в Unity.
 Ход работы:
-### Python - Google-Sheets
-- Создаём новый проект в google console
-
-![image](https://user-images.githubusercontent.com/77449049/195097032-a354c9fa-3dbc-43b9-b789-1a67441826c9.png)
-
-- Подключаем необходимые api 
-
-![image](https://user-images.githubusercontent.com/77449049/195100524-0ee7666b-a584-45ec-8c37-105a13a80017.png)
-
-- Предоставляем доступ к созданной таблице почты с сервисного аккаунта из google console 
-
-![image](https://user-images.githubusercontent.com/77449049/195102611-237318b0-8070-4c30-9f3f-8b53cd5fa61d.png)
-
-- Устанавливаем пакет gspread,numpy в наш проект
-
-![image](https://user-images.githubusercontent.com/77449049/195103554-e5ef216e-00e8-42e4-85ed-e3a67942ea3e.png)
-
-- Реализовываем запись данных из питона в нашу таблицу
-
-```py
-import gspread
-import numpy as np
-gc = gspread.service_account(filename='unitydatascience-365212-e1ab4836a0eb.json')
-sh = gc.open("UnitySheet")
-price = np.random.randint(2000, 10000, 11)
-mon = list(range(1,11))
-i = 0
-while i <= len(mon):
-    i += 1
-    if i == 0:
-        continue
-    else:
-        tempInf = ((price[i-1]-price[i-2])/price[i-2])*100
-        tempInf = str(tempInf)
-        tempInf = tempInf.replace('.',',')
-        sh.sheet1.update(('A' + str(i)), str(i))
-        sh.sheet1.update(('B' + str(i)), str(price[i-1]))
-        sh.sheet1.update(('C' + str(i)), str(tempInf))
-        print(tempInf)
-```
-- Теперь в нашу таблицу загружаются необходимые данные
-
-![image](https://user-images.githubusercontent.com/77449049/195106336-038ec2aa-64b6-4c2e-9ee9-e55922a21b3b.png)
-
-### Google-Sheets – Unity
-
-- Создаём ключ api в google console и открываем доступ к таблице по ссылке
-
-![image](https://user-images.githubusercontent.com/77449049/195107382-7c5dcdff-8a7b-4fef-b840-899c66f03053.png)
-
-- Импортируем в Unity наш проект звуки и скрипты
-
-![image](https://user-images.githubusercontent.com/77449049/195109254-ac9c85d3-d740-45a7-a728-66b435c6f420.png)
-
-- Пишем скрипт для воспроизведение звуков в зависимости от значений в таблице
-
+- Создаём новый проект в Unity, добавлля в него MLAgents и PyTorch
+- Добавляем плоскость, цель в виде куба и сферу ![image](https://user-images.githubusercontent.com/77449049/198318367-7a549859-80a1-49c8-b5ad-2d3b062100a9.png)
+- Добавляем скрипт к сфере RollerAgent
 
 ```py
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
-using SimpleJSON;
-public class NewBehaviourScript : MonoBehaviour
+using Unity.MLAgents;
+using Unity.MLAgents.Sensors;
+using Unity.MLAgents.Actuators;
+
+public class RollerAgent : Agent
 {
-    public AudioClip goodSpeak;
-    public AudioClip normalSpeak;
-    public AudioClip badSpeak;
-    private AudioSource selectAudio;
-    private Dictionary<string,float> dataSet = new Dictionary<string, float>();
-    private bool statusStart = false;
-    private int i = 1;
+    Rigidbody rBody;
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(GoogleSheets());
+        rBody = GetComponent<Rigidbody>();
     }
-    // Update is called once per frame
-    void Update()
+
+    public Transform Target;
+    public override void OnEpisodeBegin()
     {
-        if (dataSet["Mon_" + i.ToString()] <= 10 & statusStart == false & i != dataSet.Count)
+        if (this.transform.localPosition.y < 0)
         {
-            StartCoroutine(PlaySelectAudioGood());
-            Debug.Log(dataSet["Mon_" + i.ToString()]);
+            this.rBody.angularVelocity = Vector3.zero;
+            this.rBody.velocity = Vector3.zero;
+            this.transform.localPosition = new Vector3(0, 0.5f, 0);
         }
-        if (dataSet["Mon_" + i.ToString()] > 10 & dataSet["Mon_" + i.ToString()] < 100 & statusStart == false & i != dataSet.Count)
+
+        Target.localPosition = new Vector3(Random.value * 8-4, 0.5f, Random.value * 8-4);
+    }
+    public override void CollectObservations(VectorSensor sensor)
+    {
+        sensor.AddObservation(Target.localPosition);
+        sensor.AddObservation(this.transform.localPosition);
+        sensor.AddObservation(rBody.velocity.x);
+        sensor.AddObservation(rBody.velocity.z);
+    }
+    public float forceMultiplier = 10;
+    public override void OnActionReceived(ActionBuffers actionBuffers)
+    {
+        Vector3 controlSignal = Vector3.zero;
+        controlSignal.x = actionBuffers.ContinuousActions[0];
+        controlSignal.z = actionBuffers.ContinuousActions[1];
+        rBody.AddForce(controlSignal * forceMultiplier);
+
+        float distanceToTarget = Vector3.Distance(this.transform.localPosition, Target.localPosition);
+
+        if(distanceToTarget < 1.42f)
         {
-            StartCoroutine(PlaySelectAudioNormal());
-            Debug.Log(dataSet["Mon_" + i.ToString()]);
+            SetReward(1.0f);
+            EndEpisode();
         }
-        if (dataSet["Mon_" + i.ToString()] >= 100 & statusStart == false & i != dataSet.Count)
+        else if (this.transform.localPosition.y < 0)
         {
-            StartCoroutine(PlaySelectAudioBad());
-            Debug.Log(dataSet["Mon_" + i.ToString()]);
+            EndEpisode();
         }
-    }
-    IEnumerator GoogleSheets()
-    {
-        UnityWebRequest curentResp = UnityWebRequest.Get("https://sheets.googleapis.com/v4/1OV78kABwxT5I6IH4F******8t3CFgoUOOdNl6Jo1J2o/values/Лист1?key=AIzaS*****pFc24klkYDh2jsbTOuXufgW4crNc");
-        yield return curentResp.SendWebRequest();
-        string rawResp = curentResp.downloadHandler.text;
-        var rawJson = JSON.Parse(rawResp);
-        foreach (var itemRawJson in rawJson["values"])
-        {
-            var parseJson = JSON.Parse(itemRawJson.ToString());
-            var selectRow = parseJson[0].AsStringList;
-            dataSet.Add(("Mon_" + selectRow[0]), float.Parse(selectRow[2]));
-        }
-    }
-    IEnumerator PlaySelectAudioGood()
-    {
-        statusStart = true;
-        selectAudio = GetComponent<AudioSource>();
-        selectAudio.clip = goodSpeak;
-        selectAudio.Play();
-        yield return new WaitForSeconds(3);
-        statusStart = false;
-        i++;
-    }
-    IEnumerator PlaySelectAudioNormal()
-    {
-        statusStart = true;
-        selectAudio = GetComponent<AudioSource>();
-        selectAudio.clip = normalSpeak;
-        selectAudio.Play();
-        yield return new WaitForSeconds(3);
-        statusStart = false;
-        i++;
-    }
-    IEnumerator PlaySelectAudioBad()
-    {
-        statusStart = true;
-        selectAudio = GetComponent<AudioSource>();
-        selectAudio.clip = badSpeak;
-        selectAudio.Play();
-        yield return new WaitForSeconds(4);
-        statusStart = false;
-        i++;
     }
 }
 ```
-![image](https://user-images.githubusercontent.com/77449049/195125091-5bba6594-6373-41fe-8914-cb0800b3987c.png)
+- Добавляем ещё компоненты Rigidbody, Decision Requester, Behavior Parameters, и настроил их следующим образом: 
+![image](https://user-images.githubusercontent.com/77449049/198334038-c73a8934-953a-4ef2-8172-b7b5eae3d435.png)
 
-![image](https://user-images.githubusercontent.com/77449049/195125194-62a901ab-5ccb-4baf-bc7b-58a38d41dc42.png)
-
-![image](https://user-images.githubusercontent.com/77449049/195125274-d7b3c5c1-f232-4513-a914-fd06cd9756c4.png)
-
+- 
 
 ## Задание 2
 ### Реализовать запись в Google-таблицу набора данных, полученных с помощью линейной регрессии из лабораторной работы № 1. 
