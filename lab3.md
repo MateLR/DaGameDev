@@ -137,7 +137,7 @@ behaviors:
     summary_freq: 10000
 ```
 ![image](https://user-images.githubusercontent.com/77449049/200870787-cdb2dc3f-044e-4f62-a704-ffcc80468f90.png)
-![image](https://user-images.githubusercontent.com/77449049/200870985-82555238-cf76-44b8-93a8-061e2d1718e3.png)
+![image](https://user-images.githubusercontent.com/77449049/200885865-d1fd1448-5f61-4da4-92d3-1e2d7566df3b.png)
 ![image](https://user-images.githubusercontent.com/77449049/200871045-e68f8190-dce3-4666-8611-4b95a20ddb0d.png)
 
 -Далее рассмотрим работу агента с 3,9,27 копиями модели
