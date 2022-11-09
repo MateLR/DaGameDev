@@ -150,7 +150,7 @@ behaviors:
 
 ## Задание 2
 ### Подробно опишите каждую строку файла конфигурации нейронной сети
-```js
+```py
 behaviors:
   RollerAgent: # имя агента
     trainer_type: ppo # алгоритм обучения Proximal Policy Optimization
