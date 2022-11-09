@@ -111,7 +111,7 @@ public class RollerAgent : Agent
 ![image](https://user-images.githubusercontent.com/77449049/198334038-c73a8934-953a-4ef2-8172-b7b5eae3d435.png)
 - Начинаем работу MlAgent с использованием файла конфигурации нейронной сети
 
-```с
+```js
 behaviors:
   RollerAgent:
     trainer_type: ppo
@@ -150,7 +150,7 @@ behaviors:
 
 ## Задание 2
 ### Подробно опишите каждую строку файла конфигурации нейронной сети
-```с
+```js
 behaviors:
   RollerAgent: # имя агента
     trainer_type: ppo # алгоритм обучения Proximal Policy Optimization
