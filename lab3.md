@@ -140,7 +140,9 @@ behaviors:
 ![image](https://user-images.githubusercontent.com/77449049/200885865-d1fd1448-5f61-4da4-92d3-1e2d7566df3b.png)
 ![image](https://user-images.githubusercontent.com/77449049/200871045-e68f8190-dce3-4666-8611-4b95a20ddb0d.png)
 
--Далее рассмотрим работу агента с 3,9,27 копиями модели
+-Далее рассмотрим работу агента с 3,9,27 копиями модели, для этого просто скопируем нашу группу объектов
+![image](https://user-images.githubusercontent.com/77449049/200886417-f492ce57-329e-4dda-8e32-4315c11d933a.png)
+
 ![image](https://user-images.githubusercontent.com/77449049/200871593-9cfafe7e-cf18-4754-9ea0-1aff9627f5b2.png)
 ![image](https://user-images.githubusercontent.com/77449049/200871613-5255f70f-600b-4234-bade-1815bab0c4a0.png)
 ![image](https://user-images.githubusercontent.com/77449049/200871643-015866dd-29bb-4e36-9d26-26ca716ef92f.png)
