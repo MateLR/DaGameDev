@@ -163,11 +163,127 @@ public class Perceptron : MonoBehaviour {
 
 ## Задание 3
 ### Построить визуальную модель работы перцептрона на сцене Unity
+Я решил реализовать простую визуальную модель работы перцептрона, где у нас главный объект cubeFalse.
+Принцип работы заключается в том, что после того, как перцептрон закончит обучение по заданным нам параметрам, наш куб начнёт падать вниз до столкновения
+с каким либо объектом, в моём случае planeFalse и cubFalse. И в зависимости от наших параметров и объекта столкновения в консоли напишется итоговый результат.
+И начнёт опять падать с новых координат
+- Вот алгоритм Or, при столкновении с плоскостью false: 0 or 0 будет False, при столкновении с кубом True: 1 or 0 будет True
+![image](https://user-images.githubusercontent.com/77449049/205142448-a1e8c90f-00be-4a69-9647-2b5841012723.png)
+![image](https://user-images.githubusercontent.com/77449049/205142924-4ce4ebe5-2492-4610-91ec-173ecca76d3a.png)
+
+- Вот код программмы нашего второго куба, он узнаёт о значениях объектов столкновения с помощью добавленных им тегов
+```py
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Cube2 : MonoBehaviour
+{
+    private double value = 0;
+
+    public TrainingSet[] ts;
+	double[] weights = {0,0};
+	double bias = 0;
+	double totalError = 0;
+
+	double DotProductBias(double[] v1, double[] v2) 
+	{
+		if (v1 == null || v2 == null)
+			return -1;
+	 
+		if (v1.Length != v2.Length)
+			return -1;
+	 
+		double d = 0;
+		for (int x = 0; x < v1.Length; x++)
+		{
+			d += v1[x] * v2[x];
+		}
+
+		d += bias;
+	 
+		return d;
+	}
+
+	double CalcOutput(int i)
+	{
+		double dp = DotProductBias(weights,ts[i].input);
+		if(dp > 0) return(1);
+		return (0);
+	}
+
+	void InitialiseWeights()
+	{
+		for(int i = 0; i < weights.Length; i++)
+		{
+			weights[i] = Random.Range(-1.0f,1.0f);
+		}
+		bias = Random.Range(-1.0f,1.0f);
+	}
+
+	void UpdateWeights(int j)
+	{
+		double error = ts[j].output - CalcOutput(j);
+		totalError += Mathf.Abs((float)error);
+		for(int i = 0; i < weights.Length; i++)
+		{			
+			weights[i] = weights[i] + error*ts[j].input[i]; 
+		}
+		bias += error;
+	}
+
+	double CalcOutput(double i1, double i2)
+	{
+		double[] inp = new double[] {i1, i2};
+		double dp = DotProductBias(weights,inp);
+		if(dp > 0) return(1);
+		return (0);
+	}
+
+	void Train(int epochs)
+	{
+		InitialiseWeights();
+		
+		for(int e = 0; e < epochs; e++)
+		{
+			totalError = 0;
+			for(int t = 0; t < ts.Length; t++)
+			{
+				UpdateWeights(t);
+				//Debug.Log("W1: " + (weights[0]) + " W2: " + (weights[1]) + " B: " + bias);
+			}
+			Debug.Log("TOTAL ERROR: " + totalError);
+		}
+	}
+
+	void Start () {
+		Train(8);
+        Debug.Log("Обучение перцептрона закончилось");
+        GetComponent<Rigidbody>().useGravity = true;
+	}
+	
+	void Update () {
+		
+	}
+       
+   private void OnCollisionEnter(Collision collision)
+   {
+    double collValue = collision.gameObject.tag == "True" ? 1 : 0;
+    //Color color = new Color(1,0,0);
+    double dp = DotProductBias(weights, new double[] {value, collValue});
+	Debug.Log("Столкновение кубов CubeFalse c " + collision.gameObject.name + " = " + (dp > 0) );
+    //if( dp > 0) color = new Color(0,1,0);
+    //GetComponent<Renderer>().material.color = new Color(1,1,1);
+    transform.position = new Vector3(0, 4f, 0);
+   }
+}
+
+```
 
 ## Выводы
 
-Благодаря данной работе я научился работать с обучением нейронных сетей с помощью ml агента на практике, что позволит применять машинное обучение для уменьшения затрат
-по времени для балансировки игровых процессов, что очень важно для создания хорошей игры.
+С помощью этой работы я узнал работу перцептрона и научился использовать его в проекта unity, что в будущем окажет влияния на мои умения внедрения
+нейронов в игровые проекты
 
 | Plugin | README |
 
